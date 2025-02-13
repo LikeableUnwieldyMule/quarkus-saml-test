@@ -21,7 +21,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '21'
-        distribution: 'adoptopenjdk'
+        distribution: 'temurin'
 # Build the application with Maven
     - name: Build with Maven
       run: ./mvnw clean install -DskipTests
