@@ -16,7 +16,12 @@ jobs:
     - name: Log in to Azure Container Registry
       run: |
         echo ${{ secrets.AZURE_ACR_PASSWORD }} | docker login containerregistryforsamltestingforentraregistry.azurecr.io -u GitubActions --password-stdin
-
+# Set up JDK 21 (for Quarkus app with maven.compiler.release set to 21)
+    - name: Set up JDK 21
+      uses: actions/setup-java@v2
+      with:
+        java-version: '21'
+        distribution: 'adoptopenjdk'
 # Build the application with Maven
     - name: Build with Maven
       run: ./mvnw clean install -DskipTests
