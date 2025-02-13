@@ -1,3 +1,6 @@
+# Ignore certificates
+src/main/resources/certificates/*
+
 #Maven
 target/
 pom.xml.tag
