@@ -19,7 +19,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t containerregistryforsamltestingforentraregistry.azurecr.io/quarkus-saml-test:latest .
+        docker build -f src/main/docker/Dockerfile.jvm -t containerregistryforsamltestingforentraregistry.azurecr.io/quarkus-saml-test:latest .
 
     - name: Push Docker image to Azure Container Registry
       run: |
