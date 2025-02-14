@@ -168,7 +168,9 @@ public class SamlService {
             authnRequest.setAttribute("xmlns:saml", "urn:oasis:names:tc:SAML:2.0:assertion");
             authnRequest.setAttribute("ID", "_" + System.currentTimeMillis());
             authnRequest.setAttribute("Version", "2.0");
-            authnRequest.setAttribute("IssueInstant", DateTimeFormatter.ISO_INSTANT.format(Instant.now().atOffset(ZoneOffset.UTC)));
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'");
+            String issueInstant = formatter.format(Instant.now().atOffset(ZoneOffset.UTC));
+            authnRequest.setAttribute("IssueInstant", issueInstant);
             authnRequest.setAttribute("Destination", "https://login.microsoftonline.com/5945593b-3e9f-4298-8fc8-f3dcab7839e5/saml2");
             authnRequest.setAttribute("AssertionConsumerServiceURL", "https://quarkus-saml-test-d9apgdavfvewhyhf.centralus-01.azurewebsites.net/saml/acs");
 
