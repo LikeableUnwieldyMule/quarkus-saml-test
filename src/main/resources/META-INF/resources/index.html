@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAML SP-initiated SSO</title>
+</head>
+<body>
+    <h1>Service Provider Initiated SSO</h1>
+    <button id="loginButton">Login with SSO</button>
+
+    <!-- Hidden form that will be populated and submitted dynamically -->
+    <form id="samlForm" method="POST" action="" style="display:none;">
+        <input type="hidden" name="SAMLRequest" id="SAMLRequest">
+    </form>
+
+    <script>
+        // When the "Login" button is clicked
+        document.getElementById("loginButton").onclick = function() {
+            // Make an AJAX request to the Quarkus backend to get the form
+            fetch("/saml/initiateSso", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            })
+            .then(response => response.text())
+            .then(htmlForm => {
+                // Extract the SAMLRequest from the form and populate the hidden input
+                var parser = new DOMParser();
+                var doc = parser.parseFromString(htmlForm, 'text/html');
+                var samlRequest = doc.querySelector('input[name="SAMLRequest"]').value;
+
+                // Set the action URL for the form to Entra's login URL
+                document.getElementById("samlForm").action = "https://login.microsoftonline.com/5945593b-3e9f-4298-8fc8-f3dcab7839e5/saml2";
+
+                // Set the base64-encoded SAMLRequest
+                document.getElementById("SAMLRequest").value = samlRequest;
+
+                // Submit the form
+                document.getElementById("samlForm").submit();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        };
+    </script>
+</body>
+</html>
