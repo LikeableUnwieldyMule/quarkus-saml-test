@@ -2,6 +2,8 @@ package com.example.saml;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
@@ -51,6 +53,12 @@ public class SamlResource {
             // Process the SAML response and extract key fields
             SamlResponseData responseData = samlService.extractSamlData(decodedSaml);
 
+            // Check for the Department attribute
+            List<SamlAttribute> departmentAttributes = responseData.getAttributes().stream()
+                .filter(attr -> "Department".equals(attr.getName()) && "Mule Mongery".equals(attr.getValue()))
+                .collect(Collectors.toList());
+            boolean isMuleMongery = departmentAttributes.size() > 0;
+
             // Build HTML output
             String htmlResponse = "<html><body>";
             htmlResponse += "<h2>SAML Response Fields</h2>";
@@ -60,6 +68,10 @@ public class SamlResource {
             htmlResponse += "<li>Session Index: " + responseData.getSessionIndex() + "</li>";
             htmlResponse += "<li>Authn Statement Time: " + responseData.getAuthnTime() + "</li>";
             htmlResponse += "</ul>";
+
+            if (isMuleMongery) {
+                htmlResponse += "<div><h1>Mule Monger Portal</h1><img src=\"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwgTWCMu9EU1bh5UdNyW2doP7I-_QzlS_GPQ&s\" alt=\"Image\" width=\"100\" height=\"100\"></div>";
+            }
 
             htmlResponse += "<h2>Full Decoded SAML Response</h2>";
             htmlResponse += "<pre>" + escapeHtml(decodedSaml) + "</pre>";

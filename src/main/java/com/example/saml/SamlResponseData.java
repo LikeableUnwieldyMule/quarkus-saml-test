@@ -1,10 +1,25 @@
 package com.example.saml;
 
+import java.util.List;
+
 public class SamlResponseData {
     private String issuer;
     private String subject;
     private String sessionIndex;
     private String authnTime;
+    private List<SamlAttribute> attributes;
+
+    public List<SamlAttribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(List<SamlAttribute> attributes) {
+        this.attributes = attributes;
+    }
+
+    public void addAttribute(SamlAttribute attribute) {
+        this.attributes.add(attribute);
+    }
 
     public String getIssuer() {
         return issuer;
@@ -37,4 +52,6 @@ public class SamlResponseData {
     public void setAuthnTime(String authnTime) {
         this.authnTime = authnTime;
     }
+
+
 }

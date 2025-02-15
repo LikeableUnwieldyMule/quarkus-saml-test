@@ -22,6 +22,7 @@ import org.jboss.logging.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.BadRequestException;
@@ -270,6 +271,16 @@ public class SamlService {
         if (sessionIndexNode != null) {
             Element authnStatement = (Element) sessionIndexNode;
             data.setAuthnTime(authnStatement.getAttribute("AuthnInstant"));
+        }
+
+        // Extract Attributes
+        NodeList attributeNodes = doc.getElementsByTagNameNS("*", "Attribute");
+        for (int i = 0; i < attributeNodes.getLength(); i++) {
+            Element attributeNode = (Element) attributeNodes.item(i);
+            String attributeName = attributeNode.getAttribute("Name");
+            String attributeValue = attributeNode.getElementsByTagNameNS("*", "AttributeValue").item(0).getTextContent();
+            SamlAttribute attribute = new SamlAttribute(attributeName, attributeValue);
+            data.addAttribute(attribute);
         }
 
         return data;
