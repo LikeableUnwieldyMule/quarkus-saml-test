@@ -18,6 +18,9 @@ public class SamlResponseData {
     }
 
     public void addAttribute(SamlAttribute attribute) {
+        if (this.attributes == null) {
+            this.attributes = new java.util.ArrayList<>();
+        }
         this.attributes.add(attribute);
     }
 
