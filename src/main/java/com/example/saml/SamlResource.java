@@ -57,6 +57,7 @@ public class SamlResource {
             List<SamlAttribute> departmentAttributes = responseData.getAttributes().stream()
                 .filter(attr -> "Department".equals(attr.getName()) && "Mule Mongery".equals(attr.getValue()))
                 .collect(Collectors.toList());
+            LOG.info("Department attributes: " + departmentAttributes);
             boolean isMuleMongery = departmentAttributes.size() > 0;
 
             // Build HTML output

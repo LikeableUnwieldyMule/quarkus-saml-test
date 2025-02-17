@@ -275,12 +275,15 @@ public class SamlService {
 
         // Extract Attributes
         NodeList attributeNodes = doc.getElementsByTagNameNS("*", "Attribute");
+        LOG.info("Number of attributes: {}" + Integer.toString(attributeNodes.getLength()));
         for (int i = 0; i < attributeNodes.getLength(); i++) {
             Element attributeNode = (Element) attributeNodes.item(i);
             String attributeName = attributeNode.getAttribute("Name");
             String attributeValue = attributeNode.getElementsByTagNameNS("*", "AttributeValue").item(0).getTextContent();
             SamlAttribute attribute = new SamlAttribute(attributeName, attributeValue);
             data.addAttribute(attribute);
+            LOG.info("Attribute name: " + attributeName);
+            LOG.info("Attribute value: " + attributeValue);
         }
 
         return data;
