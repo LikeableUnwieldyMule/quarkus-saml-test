@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAML SP-initiated SSO</title>
+</head>
+<body>
+    <p>014002192025</p>
+    
+    <h1><a href="/saml/metadata">View Metadata</a></h1>
+    <h1>Service Provider Initiated SSO</h1>
+    <button id="loginButton">Login with SSO</button>
+
+    <!-- Hidden form -->
+    <form id="samlForm" method="POST" action="{samlIdpUrl}" style="display:none;">
+        <input type="hidden" name="SAMLRequest" id="SAMLRequest">
+    </form>
+
+    <script>
+        document.getElementById("loginButton").onclick = async function() {
+            try {
+                let response = await fetch("/saml/initiateSso", { method: "POST" });
+                let htmlForm = await response.text();
+                
+                // Extract and set the SAMLRequest value
+                let samlRequest = new DOMParser()
+                    .parseFromString(htmlForm, 'text/html')
+                    .querySelector('input[name="SAMLRequest"]').value;
+                
+                document.getElementById("SAMLRequest").value = samlRequest;
+                document.getElementById("samlForm").submit();
+            } catch (error) {
+                console.error('SSO Login Error:', error);
+            }
+        };
+    </script>
+</body>
+</html>

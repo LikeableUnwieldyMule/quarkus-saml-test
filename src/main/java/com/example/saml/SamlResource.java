@@ -22,8 +22,8 @@ public class SamlResource {
     private static final Logger LOG = Logger.getLogger(SamlResource.class);
 
     // Inject values from application.properties
-    @ConfigProperty(name = "saml.entraIdpUrl")
-    String entraIdpUrl;
+    @ConfigProperty(name = "saml.idpUrl")
+    String idpUrl;
 
     @ConfigProperty(name = "saml.spEntityId")
     String spEntityId;
@@ -106,7 +106,7 @@ public class SamlResource {
 
             // Generate the POST form with the SAML request
             // Now, the encoded SAML request is properly inserted into the form
-            String htmlForm = samlService.createHtmlForm(entraIdpUrl, encodedSamlRequest);
+            String htmlForm = samlService.createHtmlForm(idpUrl, encodedSamlRequest);
 
             // Return the form as an HTML response
             return Response.ok(htmlForm).build();

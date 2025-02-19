@@ -33,7 +33,7 @@ public class SamlService {
     private static final Logger LOG = Logger.getLogger(SamlService.class);
 
     // Inject configuration properties
-    @ConfigProperty(name = "saml.sp.entityId")
+    @ConfigProperty(name = "saml.spEntityId")
     String entityId;
     
     @ConfigProperty(name = "saml.acs.url")
@@ -41,6 +41,9 @@ public class SamlService {
 
     @ConfigProperty(name = "saml.idp.publicKey")
     String publicKeyPem;
+
+    @ConfigProperty(name = "saml.idpUrl")
+    String idpUrl;
 
     /**
      * Process the SAML response received from the IdP.
@@ -172,8 +175,8 @@ public class SamlService {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'");
             String issueInstant = formatter.format(Instant.now().atOffset(ZoneOffset.UTC));
             authnRequest.setAttribute("IssueInstant", issueInstant);
-            authnRequest.setAttribute("Destination", "https://login.microsoftonline.com/5945593b-3e9f-4298-8fc8-f3dcab7839e5/saml2");
-            authnRequest.setAttribute("AssertionConsumerServiceURL", "https://quarkus-saml-test-d9apgdavfvewhyhf.centralus-01.azurewebsites.net/saml/acs");
+            authnRequest.setAttribute("Destination", idpUrl);
+            authnRequest.setAttribute("AssertionConsumerServiceURL", acsUrl);
 
             Element issuer = document.createElement("saml:Issuer");
             issuer.appendChild(document.createTextNode(spEntityId));
